@@ -1,19 +1,19 @@
-export const CHAIN_ID = 1;
-export const ROBONOMICS = {
-  version: 5,
-  ens: '',
-  ensSuffix: 'eth',
-  lighthouse: 'airalab.lighthouse.5.robonomics.eth'
-};
-// export const CHAIN_ID = 4;
+// export const CHAIN_ID = 1;
 // export const ROBONOMICS = {
 //   version: 5,
-//   ens: '0x9D70a7ecf0834ca14969f676e54834F12eaE5E10',
+//   ens: '',
 //   ensSuffix: 'eth',
 //   lighthouse: 'airalab.lighthouse.5.robonomics.eth'
 // };
+export const CHAIN_ID = 4;
+export const ROBONOMICS = {
+  version: 5,
+  ens: '0x9D70a7ecf0834ca14969f676e54834F12eaE5E10',
+  ensSuffix: 'eth',
+  lighthouse: 'airalab.lighthouse.5.robonomics.eth'
+};
 
-export const VEHICLE = '0x9D70a7ecf0834ca14969f676e54834F12eaE5E10';
+export const VEHICLE = '0x6dC110D283F577127F433a03C2c25BCb2f84f084';
 export const COLLECTOR = {
   address: '0xab11c7888e267efdf5ba36cb58b20f2ad5ebf4de',
   model: 'QmfCcLKrTCuXsf6bHbVupVv4zsbs6kjqTQ7DRftGqMLjdW',
@@ -27,7 +27,8 @@ export const CONTROLS = {
     left: 'QmfCcLKrTCuXsf6bHbVupVv4zsbs6kjqTQ7DRftGqMLjd4',
     stop: 'QmfCcLKrTCuXsf6bHbVupVv4zsbs6kjqTQ7DRftGqMLjd5',
     right: 'QmfCcLKrTCuXsf6bHbVupVv4zsbs6kjqTQ7DRftGqMLjd6',
-    down: 'QmfCcLKrTCuXsf6bHbVupVv4zsbs6kjqTQ7DRftGqMLjd7'
+    down: 'QmfCcLKrTCuXsf6bHbVupVv4zsbs6kjqTQ7DRftGqMLjd7',
+    lock: 'QmfCcLKrTCuXsf6bHbVupVv4zsbs6kjqTQ7DRftGqMLjd8'
   }
 };
 

@@ -1,27 +1,25 @@
 <template>
-  <div>
-    <v-layout row justify-center>
-      <v-flex xs4 class="text-xs-center">
-        <v-btn class="blue lighten-1" :disabled="actions.up.loading" @click="move('up')">up</v-btn>
-      </v-flex>
-    </v-layout>
-    <v-layout row justify-center>
-      <v-flex xs4 class="text-xs-center">
-        <v-btn class="blue lighten-1" :disabled="actions.left.loading" @click="move('left')">left</v-btn>
-      </v-flex>
-      <v-flex xs4 class="text-xs-center">
-        <v-btn class="orange darken-3" :disabled="actions.stop.loading" @click="move('stop')">stop</v-btn>
-      </v-flex>
-      <v-flex xs4 class="text-xs-center">
-        <v-btn class="blue lighten-1" :disabled="actions.right.loading" @click="move('right')">right</v-btn>
-      </v-flex>
-    </v-layout>
-    <v-layout row justify-center>
-      <v-flex xs4 class="text-xs-center">
-        <v-btn class="blue lighten-1" :disabled="actions.down.loading" @click="move('down')">down</v-btn>
-      </v-flex>
-    </v-layout>
-    <div style="margin: 10px 0">
+  <div class="t-align--center" id="controlpanel" v-if="Object.keys(actions).length === 6">
+    <div>
+      <button class="btn-green" :disabled="actions.up.loading" @click="move('up')">&#8593;</button>
+    </div>
+    <div>
+      <button class="btn-green" :disabled="actions.left.loading" @click="move('left')">&#8592;</button>
+      <button
+        class="btn-orange"
+        title="stop"
+        :disabled="actions.stop.loading"
+        @click="move('stop')"
+      >
+        <span class="i-powerbtn"></span>
+      </button>
+      <button class="btn-green" :disabled="actions.right.loading" @click="move('right')">&#8594;</button>
+    </div>
+    <div>
+      <button class="btn-green" :disabled="actions.down.loading" @click="move('down')">&#8595;</button>
+    </div>
+  </div>
+  <!-- <div style="margin: 10px 0">
       <h2>Logs</h2>
       <div style="border: 1px solid #6b6060; height: 200px; overflow-y: scroll;">
         <ol>
@@ -33,8 +31,7 @@
           >{{log.msg}}</li>
         </ol>
       </div>
-    </div>
-  </div>
+  </div>-->
 </template>
 
 <script>

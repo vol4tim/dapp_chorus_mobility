@@ -1,11 +1,55 @@
 <template>
-  <v-card class="mx-auto" color="#26c6da" dark>
-    <v-card-title>
-      <v-icon large left>fa-id-card</v-icon>
-      <span class="title font-weight-light">Driver</span>
-    </v-card-title>
-
-    <v-card-text>
+  <div class="section-light" style="max-width:400px">
+    <section class="disabled m-t-0">
+      <img class="i-block" alt src="assets/i/car.jpg">
+    </section>
+    <section>
+      <h3>Unmanned vehicle</h3>
+    </section>
+    <section>
+      <div class="d-table container-full">
+        <div class="d-table--cell">Vehicle cost:</div>
+        <div class="d-table--cell t-align--right">
+          <span class="t-sm">XRT</span>
+          <span class="input-size--sm m-l-10 t-align--right">{{ price | fromWei(9) }}</span>
+        </div>
+      </div>
+      <hr>
+      <div class="d-table container-full">
+        <div class="d-table--cell">Deposit for toll collections:</div>
+        <div class="d-table--cell t-align--right">
+          <span class="t-sm">XRT</span>
+          <input v-model="amount" class="input-size--sm m-l-10 t-align--right" type="text">
+        </div>
+      </div>
+      <hr>
+      <div class="d-table container-full">
+        <div class="d-table--cell">Total:</div>
+        <div class="d-table--cell t-align--right">
+          <span class="t-sm">XRT</span>
+          <span class="t-lg">{{ full | fromWei(9) }}</span>
+        </div>
+      </div>
+    </section>
+    <button v-if="$wait.is([actionForm, actionTx])" class="container-full" disabled>
+      <span class="loader-ring m-r-10"></span>
+      <span>Unlocking car</span>
+    </button>
+    <button v-else @click="submit" class="container-full">
+      <span class="m-r-10 i-unlock"></span>
+      <span>Unlock car and gain access</span>
+    </button>
+    <div
+      v-if="$wait.is([actionForm, actionTx]) && actionTx"
+      class="response response-wait t-align--center"
+    >
+      Wait for
+      <a
+        :href="`https://etherscan.io/tx/${actionTx.replace('tx.', '')}`"
+        target="_blank"
+      >transaction</a>
+    </div>
+    <!-- <div>
       <b>Balance:</b>
       {{ balance | fromWei(9, 'XRT') }}
       <template v-if="price > 0">
@@ -13,48 +57,29 @@
         <b>Approved:</b>
         {{ approveTrade | fromWei(9, 'XRT') }}
       </template>
-    </v-card-text>
-
-    <v-card-actions>
-      <v-layout align-start justify-space-between row fill-height>
-        <v-flex md6>
-          <IconLink
-            v-if="account!=''"
-            :href="`https://etherscan.io/address/${account}`"
-            :text="account"
-          />
-        </v-flex>
-        <v-flex v-if="!isShowControls" md6 class="text-xs-right">
-          <v-btn
-            color="light-blue darken-3"
-            v-if="price > 0 && approveTrade < price"
-            :disabled="loadingApprove || balance < price"
-            @click="approve"
-          >Approve</v-btn>
-
-          <v-btn color="light-blue darken-3" v-if="approveTrade >= price" @click="order">Order</v-btn>
-        </v-flex>
-      </v-layout>
-    </v-card-actions>
-  </v-card>
+    </div>-->
+    {{error}}
+  </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
-import { COLLECTOR } from "../config";
+import { COLLECTOR, VEHICLE } from "../config";
+import { toWei } from "../utils/utils";
 
 export default {
   data() {
     return {
+      actionForm: "",
+      actionTx: "",
+      tx: "",
+      error: "",
+      amount: 0.0001,
+
       account: "",
-      price: COLLECTOR.price,
-      token: "",
-      // approveTrade: 0,
-      loadingApprove: false
+      price: COLLECTOR.price
     };
   },
   computed: {
-    ...mapState("data", ["isShowControls"]),
     balance() {
       return this.$store.getters["token/balance"](this.account);
     },
@@ -63,60 +88,99 @@ export default {
         this.account,
         this.$robonomics.factory.address
       );
+    },
+    full() {
+      return Number(this.price) + Number(toWei(this.amount, 9));
     }
   },
   mounted() {
     this.account = this.$robonomics.account.address;
-    this.token = this.$robonomics.xrt.address;
     this.$robonomics.onDemand(COLLECTOR.model, msg => {
       console.log("demand", msg);
     });
     this.$robonomics.onOffer(COLLECTOR.model, msg => {
       console.log("offer", msg);
     });
-    // this.fetchBalance();
   },
   methods: {
-    // fetchBalance() {
-    //   return this.$robonomics.xrt.call
-    //     .balanceOf(this.$robonomics.account.address)
-    //     .then(balanceOf => {
-    //       this.balance = balanceOf;
-    //       if (balanceOf > 0) {
-    //         return this.$robonomics.xrt.call.allowance(
-    //           this.$robonomics.account.address,
-    //           this.$robonomics.factory.address
-    //         );
-    //       }
-    //       return false;
-    //     })
-    //     .then(allowance => {
-    //       if (allowance) {
-    //         this.approveTrade = allowance;
-    //       }
-    //     });
-    // },
+    submit() {
+      this.error = "";
+      const value = Number(toWei(this.amount, 9));
+      const full = value + this.price;
+      if (full <= this.balance) {
+        if (this.price > this.approveTrade) {
+          this.approve();
+        } else {
+          this.transfer();
+        }
+      } else {
+        this.error = "Не достаточно средств";
+      }
+      return false;
+    },
     approve() {
-      this.loadingApprove = true;
+      this.actionForm = "approve.xrt";
+      this.$wait.start(this.actionForm);
+      this.actionTx = "";
       return this.$robonomics.xrt.send
-        .approve(this.$robonomics.factory.address, COLLECTOR.price, {
-          from: this.$robonomics.account.address
-        })
-        .then(() => {
-          this.loadingApprove = false;
-          return this.fetchBalance();
-        })
+        .approve(
+          this.$robonomics.factory.address,
+          this.price,
+          { from: this.$robonomics.account.address },
+          (e, r) => {
+            if (e) {
+              return;
+            }
+            this.$wait.end(this.actionForm);
+            this.tx = r;
+            this.actionTx = "tx." + this.tx;
+            this.$wait.start(this.actionTx);
+          }
+        )
+        .then(() => this.transfer())
         .catch(() => {
-          this.loadingApprove = false;
+          this.$wait.end(this.actionForm);
+        });
+    },
+    transfer() {
+      const value = Number(toWei(this.amount, 9));
+      if (value === 0) {
+        return this.order();
+      }
+      this.actionForm = "transfer.xrt";
+      this.$wait.start(this.actionForm);
+      this.actionTx = "";
+      return this.$robonomics.xrt.send
+        .transfer(
+          VEHICLE,
+          value,
+          { from: this.$robonomics.account.address },
+          (e, r) => {
+            if (e) {
+              return;
+            }
+            this.$wait.end(this.actionForm);
+            this.tx = r;
+            this.actionTx = "tx." + this.tx;
+            this.$wait.start(this.actionTx);
+          }
+        )
+        .then(() => this.order())
+        .catch(() => {
+          this.$wait.end(this.actionForm);
         });
     },
     order() {
+      this.$wait.end(this.actionTx);
+      this.actionTx = "";
+      this.actionForm = "order";
+      this.$wait.start(this.actionForm);
       this.$robonomics.web3.eth.getBlock("latest", (e, r) => {
         const demand = {
           model: COLLECTOR.model,
           objective: COLLECTOR.objective,
           token: this.$robonomics.xrt.address,
-          cost: COLLECTOR.price,
+          cost: this.price,
           lighthouse: this.$robonomics.lighthouse.address,
           validator: "0x0000000000000000000000000000000000000000",
           validatorFee: 0,
@@ -134,11 +198,17 @@ export default {
             liability.getInfo().then(info => {
               clearInterval(intervals[info.demandHash]);
               this.$store.commit("data/showControls", true);
+              this.$store.commit("data/liability", liability.address);
+              this.$wait.end(this.actionForm);
               liability.onResult().then(result => {
                 console.log(result);
                 this.$store.commit("data/showControls", false);
+                this.$store.commit("data/result", true);
               });
             });
+          })
+          .catch(() => {
+            this.$wait.end(this.actionForm);
           });
       });
     }

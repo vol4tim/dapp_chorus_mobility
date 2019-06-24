@@ -1,24 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
-    <title>dapp_chorus_mobility</title>
-    <script src="<%= BASE_URL %>ipfs.min.js"></script>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>Demo Chorus Roads | chorus.mobi</title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
     <link
-      href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,900&amp;amp;subset=cyrillic,cyrillic-ext"
+      type="text/css"
+      media="all"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.20.0/slimselect.min.css"
       rel="stylesheet"
     />
+    <link
+      href="<%= BASE_URL %>assets/css/robonomics_website.min.css?v=1"
+      rel="stylesheet"
+    />
+    <script src="<%= BASE_URL %>assets/js/robonomics_plugins.min.js?v=1"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.20.0/slimselect.min.js"></script>
+    <script src="<%= BASE_URL %>assets/js/robonomics_website.js?v=1"></script>
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico" type="image/x-icon" />
+    <link
+      rel="shortcut icon"
+      href="<%= BASE_URL %>favicon.ico"
+      type="image/x-icon"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="114x114"
+      href="<%= BASE_URL %>apple-touch-icon-114x114.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="72x72"
+      href="<%= BASE_URL %>apple-touch-icon-72x72.png"
+    />
+    <script src="<%= BASE_URL %>ipfs.min.js"></script>
+    <script src="<%= BASE_URL %>web3.min.js"></script>
   </head>
-  <body>
+  <body class="flexcols theme-light">
     <noscript>
       <strong
         >We're sorry but dapp_chorus_mobility doesn't work properly without
         JavaScript enabled. Please enable it to continue.</strong
       >
     </noscript>
+
+    <div class="sidebar flexcols">
+      <div class="sidebar-col sidebar-col--sm">
+        <div class="sidebar-col-in">
+          <section>
+            <div class="m-b-10">
+              <a href="/">
+                <img
+                  alt="dApp logo"
+                  src="assets/i/chorus_logo.png"
+                  style="max-width: 60px"
+                />
+              </a>
+            </div>
+            <div class="t-label--orange t-sm t-align--center">DEMO</div>
+          </section>
+          <section class="sidebar-col--bottom">
+            <a class="sidebar-i--lg" href="javascript:;" show-on="#sidebar-info"
+              >?</a
+            >
+          </section>
+        </div>
+      </div>
+      <div class="sidebar-col slide-right close" id="sidebar-info">
+        <div class="sidebar-col-in">
+          <section style="max-width: 300px">
+            <h2>About</h2>
+            <p>
+              This is DEMO dApp (decentrilized application) aims to demonstrate
+              the basic principles of economic interaction between unmanned
+              vehicles and people.
+            </p>
+            <p>
+              Built on
+              <a href="#">robonomomics.network</a>
+            </p>
+          </section>
+        </div>
+      </div>
+    </div>
     <div id="app"></div>
     <!-- built files will be auto injected -->
   </body>

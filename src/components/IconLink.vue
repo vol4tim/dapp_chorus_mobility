@@ -6,10 +6,8 @@
     class="white--text font-weight-bold"
     style="text-decoration: none"
   >
-    <v-avatar size="40px">
-      <img v-if="isIcon" :src="icon()" alt class="elevation-6">
-    </v-avatar>
-    {{ text.slice(0, 6) + '...' + text.slice(-4) }}
+    <img v-if="isIcon" :src="icon()" alt class="avatar-small align-vertical m-r-10">
+    <b class="align-vertical">{{ text.slice(0, 6) + '...' + text.slice(-4) }}</b>
   </a>
 </template>
 

@@ -1,6 +1,8 @@
 // initial state
 const state = {
-  isShowControls: false
+  isShowControls: true,
+  liability: '',
+  result: false
 };
 
 // getters
@@ -13,6 +15,12 @@ const actions = {};
 const mutations = {
   showControls(state, data) {
     state.isShowControls = data;
+  },
+  liability(state, data) {
+    state.liability = data;
+  },
+  result(state, data) {
+    state.result = data;
   }
 };
 

@@ -1,31 +1,23 @@
 <template>
-  <v-card class="mx-auto" color="blue-grey lighten-2" dark>
-    <v-card-title>
-      <v-icon large left>fa-road</v-icon>
-      <span class="title font-weight-light">Collector</span>
-    </v-card-title>
-
-    <v-card-text>
-      <b>Balance:</b>
-      {{ balance | fromWei(9, 'XRT') }}
-    </v-card-text>
-
-    <v-card-actions>
-      <v-layout align-start justify-space-between row fill-height>
-        <v-flex md6>
-          <IconLink
-            v-if="address!=''"
-            :href="`https://etherscan.io/address/${address}`"
-            :text="address"
-          />
-        </v-flex>
-        <v-flex md6 class="text-xs-right">
-          <v-icon large left v-if="isShowControls">fa-lock-open-alt</v-icon>
-          <v-icon large left v-else>fa-lock</v-icon>
-        </v-flex>
-      </v-layout>
-    </v-card-actions>
-  </v-card>
+  <section class="m-t-0 top-panel">
+    <img class="i-block" alt src="assets/i/cam-0-2.jpg">
+    <div class="top-panel--content">
+      <div class="t-sm">
+        <IconLink
+          v-if="address!=''"
+          :href="`https://etherscan.io/address/${address}`"
+          :text="address"
+          :isIcon="false"
+        />
+      </div>
+      <div class="t-lg t-color-green">
+        <b>{{ balance | fromWei(9, 'XRT') }}</b>
+      </div>
+    </div>
+    <div id="paid" v-if="result">
+      <div>TOLL COLLECTION PAID</div>
+    </div>
+  </section>
 </template>
 
 <script>
@@ -39,7 +31,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("data", ["isShowControls"]),
+    ...mapState("data", ["result"]),
     balance() {
       return this.$store.getters["token/balance"](COLLECTOR.address);
     }
